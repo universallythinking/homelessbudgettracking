@@ -1,0 +1,44 @@
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+  <p onclick="checkAuth()" id="statusText">Click here to check token...</p>
+  <p onclick="invalidateToken()" id="statusText">Click here to invalidate token...</p>
+  <script>
+          window.invalidateToken = function () {
+            localStorage.token = "lsajf;alsdjfl;a";
+            $("#statusText").text("Click here to check token...");
+          }
+          window.checkAuth = function () {
+            var obj = {};
+            obj.user = localStorage.user;
+            obj.password = localStorage.password;
+            obj.token = localStorage.token;
+            $.ajax({
+              type: "POST",
+              timeout: 1000,
+              url: '/verifyAuth',
+              data: obj,
+              success: function(data) {
+                //localStorage.token = data.token;
+                if (data.message.indexOf("Wrong") != -1) {
+                  $("#statusText").text("Invalid or no token / credentials...  Click here to try again.");
+                }
+                else {
+                  $("#statusText").text("Token is valid: " + localStorage.token);
+                }
+              },
+              error: function(request, status, err) {
+                if(status == "timeout") {
+                    $("#statusText").text("Invalid or no token / credentials...  Click here to try again.");
+                }
+                else {
+                    location.href = "http://localhost:8080/public/error.html";
+                }
+              }
+            });
+          }
+</script>
+</body>
+</html>

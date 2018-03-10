@@ -1,0 +1,26 @@
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+  <script>
+          var obj = {};
+          obj.user = "benji";
+          obj.password = "benji";
+          obj.token = "" || localStorage.token;
+          $.ajax({
+            type: "POST",
+            url: '/auth',
+            timeout: 1000,
+            data: obj,
+            success: function(data){
+              console.log(data);
+              localStorage.token = data.token;
+              localStorage.user = data.user;
+              localStorage.password = data.password;
+              setTimeout(function() { location.href = "http://localhost:8080/public/success.html"; }, 500);
+            }
+          });
+</script>
+</body>
+</html>
